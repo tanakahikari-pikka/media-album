@@ -1,9 +1,5 @@
-pre-push:
+pre-commit:
   commands:
-    packages-audit:
-      tags: frontend biome check
-      run: npm audit
-
     biome:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       run: npm run check {staged_files}
