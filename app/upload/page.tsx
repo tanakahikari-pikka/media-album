@@ -27,7 +27,6 @@ export default function VideoUploadView(){
       }
 
       if (file.size > mbDataSize * 1024 * 1024) {
-        // テンプレートリテラル
         setError(`ファイルサイズが大きすぎます。${mbDataSize}MB以下のファイルを選択してください`);
         return;
       }
