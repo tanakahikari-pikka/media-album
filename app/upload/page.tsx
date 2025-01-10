@@ -1,17 +1,18 @@
-"use client"
+'use client';
 
-import React, { useState, useRef } from 'react';
-import { Upload, X } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Upload, X } from 'lucide-react';
+import type React from 'react';
+import { useRef, useState } from 'react';
 
 interface VideoFile extends File {
   preview?: string;
 }
 const mbDataSize: number = 100;
 
-export default function VideoUploadView(){
+export default function VideoUploadView() {
   const [selectedFile, setSelectedFile] = useState<VideoFile | null>(null);
   const [error, setError] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +28,9 @@ export default function VideoUploadView(){
       }
 
       if (file.size > mbDataSize * 1024 * 1024) {
-        setError(`ファイルサイズが大きすぎます。${mbDataSize}MB以下のファイルを選択してください`);
+        setError(
+          `ファイルサイズが大きすぎます。${mbDataSize}MB以下のファイルを選択してください`,
+        );
         return;
       }
 
@@ -71,94 +74,106 @@ export default function VideoUploadView(){
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardContent className="p-6">
+    <Card className='w-full max-w-2xl mx-auto'>
+      <CardContent className='p-6'>
         <div
-          className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center"
+          className='border-2 border-dashed border-gray-300 rounded-lg p-6 text-center'
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
           {!selectedFile ? (
-            <_VideoUploadSection fileInputRef={fileInputRef} mbDataSize={mbDataSize} />
+            <_VideoUploadSection
+              fileInputRef={fileInputRef}
+              mbDataSize={mbDataSize}
+            />
           ) : (
-            <_VideoPreviewSection selectedFile={selectedFile} onRemove={removeFile} />
+            <_VideoPreviewSection
+              selectedFile={selectedFile}
+              onRemove={removeFile}
+            />
           )}
           <input
             ref={fileInputRef}
-            type="file"
-            accept="video/*"
+            type='file'
+            accept='video/*'
             onChange={handleFileSelect}
-            className="hidden"
+            className='hidden'
           />
         </div>
-        {error && (
-          <AlertMessage error={error} />
-        )}
+        {error && <AlertMessage error={error} />}
       </CardContent>
     </Card>
   );
-};
+}
 
 interface VideoPreviewSectionProps {
   selectedFile: VideoFile;
   onRemove: () => void;
 }
 
-const _VideoPreviewSection: React.FC<VideoPreviewSectionProps> = ({ selectedFile, onRemove }) => {
+const _VideoPreviewSection: React.FC<VideoPreviewSectionProps> = ({
+  selectedFile,
+  onRemove,
+}) => {
   return (
-    <div className="space-y-4">
-      <div className="relative aspect-video">
+    <div className='space-y-4'>
+      <div className='relative aspect-video'>
         <video
           src={selectedFile.preview}
           controls
-          className="w-full h-full rounded"
-        />
+          className='w-full h-full rounded'
+        >
+          <track
+            kind='captions'
+            srcLang='en'
+            label='English captions'
+            src='/path/to/captions.vtt'
+            default
+          />
+        </video>
         <Button
-          variant="destructive"
-          size="icon"
-          className="absolute top-2 right-2"
+          variant='destructive'
+          size='icon'
+          className='absolute top-2 right-2'
           onClick={onRemove}
         >
-          <X className="h-4 w-4" />
+          <X className='h-4 w-4' />
         </Button>
       </div>
-      <p className="text-sm text-gray-500">
-        {selectedFile.name} ({(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
+      <p className='text-sm text-gray-500'>
+        {selectedFile.name} ({(selectedFile.size / (1024 * 1024)).toFixed(2)}{' '}
+        MB)
       </p>
     </div>
   );
-}
-
+};
 
 interface VideoUploadSectionProps {
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   mbDataSize: number;
 }
 
-const _VideoUploadSection: React.FC<VideoUploadSectionProps> = ({ fileInputRef, mbDataSize }) => {
+const _VideoUploadSection: React.FC<VideoUploadSectionProps> = ({
+  fileInputRef,
+  mbDataSize,
+}) => {
   return (
-    <div className="space-y-4">
-      <div className="flex justify-center">
-        <Upload className="h-12 w-12 text-gray-400" />
+    <div className='space-y-4'>
+      <div className='flex justify-center'>
+        <Upload className='h-12 w-12 text-gray-400' />
       </div>
       <div>
-        <p className="text-lg font-medium">
-          ここに動画をドラッグ＆ドロップ
-        </p>
-        <p className="text-sm text-gray-500">
-          または
-        </p>
+        <p className='text-lg font-medium'>ここに動画をドラッグ＆ドロップ</p>
+        <p className='text-sm text-gray-500'>または</p>
         <Button
           onClick={() => fileInputRef.current?.click()}
-          variant="outline"
-          className="mt-2"
+          variant='outline'
+          className='mt-2'
         >
           ファイルを選択
         </Button>
       </div>
-      <p className="text-sm text-gray-500">
-        {mbDataSize}MB以下の動画ファイル
-      </p>
+      <p className='text-sm text-gray-500'>{mbDataSize}MB以下の動画ファイル</p>
     </div>
   );
 };
@@ -170,9 +185,9 @@ interface errorMessageProps {
 const AlertMessage: React.FC<errorMessageProps> = ({ error }) => {
   return (
     <div>
-      <Alert variant="destructive" className="mt-4">
+      <Alert variant='destructive' className='mt-4'>
         <AlertDescription>{error}</AlertDescription>
       </Alert>
     </div>
   );
-}
+};
