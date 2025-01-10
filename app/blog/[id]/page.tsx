@@ -7,16 +7,16 @@
 // }
 
 export default async function BlogPost({
-  params
+  params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }) {
   // const post = await getPost(params.id);
 
   const post = {
     id: 1,
     title: '記事1',
-    content: '記事1の内容'
+    content: '記事1の内容',
   };
 
   return (
